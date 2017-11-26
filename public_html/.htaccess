@@ -1,0 +1,19 @@
+﻿<ifModule mod_rewrite.c>
+    #RewriteEngine On
+    #RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteCond %{REQUEST_URI} !index
+    #RewriteCond %{REQUEST_URI} !.*\.(css¦js|html|png) #Add extra extensions needed.
+    #RewriteRule (.*) index.html [L]
+</ifModule>
+
+
+
+RewriteEngine On
+ # Jeżeli dany zasób lub katalog istnieje jego adres nie będzie modyfikowany
+ RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+ RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+ RewriteRule ^ - [L]
+ 
+# Jeżeli dany zasób lub katalog nie istnieje, zwróć index.html
+ RewriteRule ^ index.html

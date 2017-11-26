@@ -1,0 +1,128 @@
+<section id="kontakt">
+
+    <div id="fadein" class="container">
+        <h1>Kontakt</h1>
+        <div class="row">
+
+            <div class="col-sm-6 proj">
+
+                <p>
+                    <h2>
+                        <span class="fa fa-phone"></span> Telefon komórkowy
+                    </h2>
+                    <span class="con">+ 48 691 230 185</span>
+                </p>
+                <br>
+                <p>
+                    <h2>
+                        <span class="fa fa-envelope"></span> Email
+                    </h2>
+                    <span class="con"><a href="mailto:lukasz@rojewski.eu" target="_top">lukasz@rojewski.eu</a></span>
+                </p>
+                <br>
+                <p>
+                    <h2>
+                        <span class="fa fa-check"></span> Online
+                    </h2>
+        <a href="https://www.linkedin.com/in/%C5%82ukasz-rojewski-7438179b" target="_blank"><img class="imglinkedin" src="img/linkedin.png" alt="linkedin rojewski"></a>
+                    <a href="https://github.com/rojewskieu" target="_blank"><img class="imggithub" src="img/github.png" alt="github rojewski"></a>
+                </p>
+            </div>
+
+            <div class="col-sm-6 proj">
+
+
+                <h2>Formularz kontaktowy</h2> <br>
+
+
+                <form action="form/send.php" method="post" id="contactform">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+
+                                <div class="form-group">
+                                    <input type="text" name="contact_name" class="form-control" placeholder="Imię i nazwisko" required="required" tabindex="1" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" name="contact_email" class="form-control" placeholder="Adres e-mail" required="required" tabindex="2" />
+                                </div>
+                                <div class="form-group">
+                                    <textarea rows="5" columns="10" name="contact_body" class="form-control" placeholder="Treść wiadomości" required="required" tabindex="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-3">
+                                            <input type="submit" class="btn btn-danger" value="Wyślij" tabindex="5" />
+                                        </div>
+
+                                        <div class="col-md-4 col-xs-6">Podaj wynik: <span class="form_check_1"></span> &times; <span class="form_check_2"></span> = </div>
+                                        <div class="col-md-2 col-xs-3"><input type="text" name="contact_check" class="form-control" maxlength="2" tabindex="4" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="contact_check_data" value="" />
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function() {
+            var check_1 = (Math.floor(Math.random() * 9) + 1).toString(),
+                check_2 = (Math.floor(Math.random() * 9) + 1).toString(),
+                check = check_1 + check_2;
+
+            $('#contactform span.form_check_1').text(check_1);
+            $('#contactform span.form_check_2').text(check_2);
+            $('#contactform input[name="contact_check_data"]').val(check);
+
+            var sending = false;
+            $('#contactform').on('submit', function(e) {
+                var $form = $(this),
+                    $submit = $('input[type="submit"]', $form);
+
+                e.preventDefault();
+
+                if (sending) {
+                    return false;
+                }
+
+                $('.form-error', $form).remove();
+
+                $('input, textarea', $form).prop('readonly', true);
+                $submit.val('Wysyłam…');
+                sending = true;
+
+                $.post($form.attr('action'), $form.serialize(), function(data) {
+                    if (data === 'ok') {
+                        $form.slideUp('fast', function() {
+                            $form.after('<div class="alert alert-success">Wiadomość została wysłana! Skontaktuje się z Tobą jak tylko to będzie możliwe.</div>');
+                        });
+
+                        return true;
+                    }
+
+                    $form.prepend('<div class="alert alert-danger">Wystąpił błąd podczas wysyłania formularza. Upewnij się, że wypełniłeś wszystkie pola i poprawnie rozwiązałeś działanie.</div>');
+                    $('input, textarea', $form).prop('readonly', false);
+                    $submit.val('Wyślij wiadomość');
+                    sending = false;
+
+                    return false;
+                }, 'text');
+            });
+        });
+
+    </script>
+
+    <ng-include src="'partials/stopka.html'"></ng-include>
+
+</section>
